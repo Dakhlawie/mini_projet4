@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorator="template">
+<link rel="stylesheet" type="text/css"
+href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+<head>
+<meta charset="utf-8">
+<title>Ajout des Factures</title>
+</head>
+
+<div th:replace="template"></div>
+<div class="container mt-5">
+<div class="card">
+ <div class="card-header" th:if="${mode=='new'}"> Ajout des Factures </div>
+ <div class="card-header" th:if="${mode=='edit'}">Modification des Factures
+</div>
+<div class="card-body">
+ <form th:action="@{saveFacture}" method="post">
+	 <div class="form-group">
+<label class="control-label" hidden>ID Facture :</label>
+ <input type="hidden" name="idFacture" class="form-control"
+th:value="${facture.idFacture}" />
+</div>
+ <div class="form-group">
+<label class="control-label">Montant :</label>
+<input type="text" name="montant" class="form-control" th:value="${facture.montant}"/>
+<span th:errors= ${facture.montant} class="text-danger"> </span>
+ </div>
+
+ <div class="form-group">
+ <label class="control-label">date emission :</label>
+<input type="date" name="dateEmission" class="form-control" th:value="${facture.dateEmission}"/>
+<span th:errors= ${facture.dateEmission} class="text-danger"> </span>
+ </div>
+ <div class="form-group">
+							<label class="control-label">Client :</label> 
+							<select     name="client" class="form-control" th:value="${facture.client.idClient}"   th:if= "${!#strings.isEmpty(facture.client)}" >
+								<option th:each="c:${clients}" th:if="${mode=='edit'}"
+									th:value="${c.idClient}" th:text="${c.nom}"
+									th:selected="${ c.idClient==facture.client.idClient}"></option>
+
+								<option th:each="c:${clients}" th:if="${mode=='new'}"
+									th:value="${c.idClient}" th:text="${c.nom}"></option>
+							</select>
+							
+						
+						<!-- Pour ne pas avoir d'erreurs si la catégorie est null on ajoute ce select -->
+							<select     name="client" class="form-control"    th:if= "${#strings.isEmpty(facture.client)}" >
+								<option th:each="c:${clients}" th:value="${c.idClient}" th:text="${c.nom}"></option>
+							</select>
+							
+						</div>
+<div class="form-group">
+	<label class="control-label" hidden>page : </label>
+    <input type="text" name="page"  th:value="${page}" hidden/>
+</div>
+ <div>
+ <button type="submit" class="btn btn-primary">Valider</button>
+ </div>
+ </form>
+</div>
+ </div>
+ </div>
+ </div>
+ 
+</body>
+</html>
